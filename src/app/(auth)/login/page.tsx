@@ -1,8 +1,9 @@
+import { AuthForm } from '@/components/AuthForm'
 import React from 'react'
 
 function LoginPage() {
   return (
-    <div>LoginPage</div>
+    <AuthForm process='sign in'/>
   )
 }
 
