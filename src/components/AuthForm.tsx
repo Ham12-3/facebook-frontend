@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { Form } from "@/interface/interface";
 import { BsFillImageFill } from "react-icons/bs";
 import Image from "next/image";
@@ -18,6 +18,18 @@ export const AuthForm = ({ process }: { process: string }) => {
   ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
+  const handleSubmit =(e:FormEvent)=> {
+e.preventDefault()
+if(pathname === 'login') {
+    try {
+
+    } catch(error) {
+        
+    }
+}
+
+  }
   const fileSelected = (e: ChangeEvent<HTMLInputElement>) => {
     setImage(e.target.files![0]);
     const reader: any = new FileReader();
@@ -32,6 +44,7 @@ export const AuthForm = ({ process }: { process: string }) => {
       style={{ background: "url(https://i.stack.imgur.com/vzbuQ.jpg)" }}
     >
       <form
+      onSubmit={handleSubmit}
         className="relative flex-col flex w-[580px] justify-center gap-y-5 bg-white/[.03] py-10 px-12 backdrop-blur-[3px]"
         action=""
       >

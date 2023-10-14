@@ -3,7 +3,7 @@ import React from 'react'
 
 function LoginPage() {
   return (
-    <AuthForm process='sign in'/>
+    <AuthForm process='Sign In'/>
   )
 }
 
