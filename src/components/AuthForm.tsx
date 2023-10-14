@@ -3,8 +3,13 @@ import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { Form } from "@/interface/interface";
 import { BsFillImageFill } from "react-icons/bs";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { login, register } from "@/services/auth";
+import toast, { Toaster } from "react-hot-toast";
+import { useAppDispatch } from "@/redux/hooks";
+import { loginRedux } from "@/redux/reducers/auth.slice";
+
 export const AuthForm = ({ process }: { process: string }) => {
   const [form, setForm] = useState<Form>({});
   const [image, setImage] = useState<File>();
@@ -12,6 +17,8 @@ export const AuthForm = ({ process }: { process: string }) => {
   const imgRef = useRef<HTMLInputElement>(null);
 
   const pathname = usePathname();
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -19,17 +26,48 @@ export const AuthForm = ({ process }: { process: string }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit =(e:FormEvent)=> {
-e.preventDefault()
-if(pathname === '/login') {
-    try {
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (pathname === "/login") {
+      try {
+        const { message, user } = await login(form);
+        toast.success(message, { duration: 1000 });
+        dispatch(loginRedux(user));
+        setTimeout(() => {
+          toast.dismiss();
+          router.push("/");
+        }, 1500);
+      } catch (error: any) {
+        toast.error(error.response.data.message, { duration: 2500 });
+      }
+    } else {
+      try {
+        const formData = new FormData();
+        formData.append("username", form.username);
+        formData.append("password", form.password);
+        formData.append("email", form.email);
+        formData.append("first_name", form.first_name || "");
+        formData.append("last_name", form.last_name || "");
+        formData.append("bio", form.bio || "");
+        formData.append("image", image!);
 
-    } catch(error) {
-        
+        const { data, status } = await register(formData);
+        if (status === 201) {
+          const user = { username: data.username, password: form.password };
+          const { user: loggedUser } = await login(user);
+          dispatch(loginRedux(loggedUser));
+          toast.success("Successfully registered", { duration: 1000 });
+
+          setTimeout(() => {
+            toast.dismiss();
+            router.push("/");
+          }, 1500);
+        }
+      } catch (error: any) {
+        toast.error(error.response.data.message, { duration: 2500 });
+      }
     }
-}
-
-  }
+  };
   const fileSelected = (e: ChangeEvent<HTMLInputElement>) => {
     setImage(e.target.files![0]);
     const reader: any = new FileReader();
@@ -44,7 +82,7 @@ if(pathname === '/login') {
       style={{ background: "url(https://i.stack.imgur.com/vzbuQ.jpg)" }}
     >
       <form
-      onSubmit={handleSubmit}
+        onSubmit={handleSubmit}
         className="relative flex-col flex w-[580px] justify-center gap-y-5 bg-white/[.03] py-10 px-12 backdrop-blur-[3px]"
         action=""
       >
@@ -143,6 +181,7 @@ if(pathname === '/login') {
         )}
         <button className="p-4 rounded-lg bg-blue-600"> {process}</button>
       </form>
+      <Toaster />
     </div>
   );
 };
