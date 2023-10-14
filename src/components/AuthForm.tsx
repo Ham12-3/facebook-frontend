@@ -21,7 +21,7 @@ export const AuthForm = ({ process }: { process: string }) => {
 
   const handleSubmit =(e:FormEvent)=> {
 e.preventDefault()
-if(pathname === 'login') {
+if(pathname === '/login') {
     try {
 
     } catch(error) {
