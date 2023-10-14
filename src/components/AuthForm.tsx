@@ -30,8 +30,9 @@ export const AuthForm = ({ process }: { process: string }) => {
     e.preventDefault();
     if (pathname === "/login") {
       try {
-        const { message, user } = await login(form);
+        const {message, user} = await login(form);
         toast.success(message, { duration: 1000 });
+        console.log(user)
         dispatch(loginRedux(user));
         setTimeout(() => {
           toast.dismiss();
