@@ -158,6 +158,8 @@ export const AuthForm = ({ process }: { process: string }) => {
                   alt="prevImage"
                   fill
                   placeholder="blur"
+                  sizes='(max-width:80px) 100vw'
+                  loading="lazy"
                   blurDataURL="/blur.svg"
                   className="rounded-full object-cover cursor-pointer"
                 />
