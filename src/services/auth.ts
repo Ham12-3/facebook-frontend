@@ -8,7 +8,7 @@ export const login  = async(credentials: Form) => {
    return data;
 
 }
-export const register =async(credentials: FormData) => {
-const {data} = await API.post('user/', credentials)
-return data;
-}
+// export const register =async(credentials: FormData) => {
+// const {data} = await API.post('user/', credentials)
+// return data;
+// }
