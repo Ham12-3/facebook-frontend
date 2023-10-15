@@ -1,8 +1,13 @@
+import ProtectedRoutes from '@/redux/store/ProtectedRoutes'
 import React from 'react'
+import { NavBar } from '@/components/NavBar/NavBar'
 
-function Layout() {
+function Layout({children}: {children:React.ReactNode}) {
   return (
-    <div>Layout</div>
+   <ProtectedRoutes>
+    <NavBar/>
+    {children}
+   </ProtectedRoutes>
   )
 }
 
