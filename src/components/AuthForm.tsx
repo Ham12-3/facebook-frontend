@@ -16,7 +16,7 @@ export const AuthForm = ({ process }: { process: string }) => {
   const [prevImage, setPrevImage] = useState();
   const imgRef = useRef<HTMLInputElement>(null);
 
-const {dispatch, pathname, router}=useAuth()
+const {dispatch, pathname, router, authChecked}=useAuth()
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -76,7 +76,10 @@ const {dispatch, pathname, router}=useAuth()
     };
   };
   return (
-    <div
+    <>
+   {
+    authChecked ? (
+      <div
       className="h-screen w-screen flex items-center justify-center"
       style={{ background: "url(https://i.stack.imgur.com/vzbuQ.jpg)" }}
     >
@@ -184,5 +187,12 @@ const {dispatch, pathname, router}=useAuth()
       </form>
       <Toaster />
     </div>
+    ) : (
+<>
+</>
+    )
+    
+   }
+   </>
   );
 };

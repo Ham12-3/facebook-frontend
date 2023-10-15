@@ -28,3 +28,12 @@ export const refreshToken = async()=> {
    localStorage.setItem('refresh', data.refresh)
    return data;
 }
+
+export const userLogged = async() => {
+  const {data} =  await API.get('user-logged/', {
+      headers: {
+         Authorization : `Bearer ${localStorage.getItem('access')}`
+      }
+   })
+   return data;
+}
