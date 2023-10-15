@@ -3,12 +3,12 @@ import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { Form } from "@/interface/interface";
 import { BsFillImageFill } from "react-icons/bs";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+
 import Link from "next/link";
 import { login, register } from "@/services/auth";
 import toast, { Toaster } from "react-hot-toast";
-import { useAppDispatch } from "@/redux/hooks";
 import { loginRedux } from "@/redux/reducers/auth.slice";
+import { useAuth } from "@/hooks/useAuth";
 
 export const AuthForm = ({ process }: { process: string }) => {
   const [form, setForm] = useState<Form>({});
@@ -16,9 +16,7 @@ export const AuthForm = ({ process }: { process: string }) => {
   const [prevImage, setPrevImage] = useState();
   const imgRef = useRef<HTMLInputElement>(null);
 
-  const pathname = usePathname();
-  const router = useRouter();
-  const dispatch = useAppDispatch();
+const {dispatch, pathname, router}=useAuth()
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
