@@ -1,7 +1,23 @@
+import Image from 'next/image'
 import React from 'react'
 
-export const ProfilePicture = () => {
+interface Props {
+    image:string
+}
+
+export const ProfilePicture = ({image} : Props) => {
   return (
-    <div>ProfilePicture</div>
+    <div className='relative flex items-center'>
+        <div className="w-[40px] max-w-[45px] h-[40px] relative ml-8 cursor-pointer after:content-[''] after:w-[12px] after:h-[12px] after:rounded-full after:bg-green-500 after:absolute after:top-0 after:right-0 after:border-gray-200 after:border-2">
+            <Image
+            src={`${process.env.NEXT_PUBLIC_API_URL}/${image}`}
+            alt='ProfilePicture'
+            fill
+            loading='lazy'
+            sizes='(max-width: 40 px) 100vw 40px'
+            className='rounded-full object-cover object-center'
+            />
+        </div>
+    </div>
   )
 }
