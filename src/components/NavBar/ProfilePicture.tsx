@@ -2,13 +2,16 @@ import Image from 'next/image'
 import React from 'react'
 
 interface Props {
-    image:string
+    image:string,
+    show:  () => void
 }
 
-export const ProfilePicture = ({image} : Props) => {
+export const ProfilePicture = ({image, show} : Props) => {
   return (
     <div className='relative flex items-center'>
-        <div className="w-[40px] max-w-[45px] h-[40px] relative ml-8 cursor-pointer after:content-[''] after:w-[12px] after:h-[12px] after:rounded-full after:bg-green-500 after:absolute after:top-0 after:right-0 after:border-gray-200 after:border-2">
+        <div className="w-[40px] max-w-[45px] h-[40px] relative ml-8 cursor-pointer after:content-[''] after:w-[12px] after:h-[12px] after:rounded-full after:bg-green-500 after:absolute after:top-0 after:right-0 after:border-gray-200 after:border-2"
+        onClick={show}
+        >
             <Image
             src={`${process.env.NEXT_PUBLIC_API_URL}/${image}`}
             alt='ProfilePicture'

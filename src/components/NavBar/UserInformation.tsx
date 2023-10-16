@@ -8,22 +8,48 @@ interface Props {
     image: string,
     id:number,
     firstName:string,
-    lastName:string
+    lastName:string,
+    showOptions : boolean
 }
-export const UserInformation = ({image, id, firstName, lastName}: Props) => {
+export const UserInformation = ({image, id, firstName, lastName, showOptions}: Props) => {
     const dispatch = useAppDispatch()
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(()=> {
+    if(localStorage.getItem('theme') === 'dark') return false
+    return true
+  });
+  const handleTheme =() => {
+    setToggle(!toggle)
+    document.documentElement.classList.toggle('dark')
+    if(localStorage.getItem('theme') === 'light') {
+      localStorage.setItem('theme', 'dark')
+    } else {
+      localStorage.setItem('theme', 'light')
+    }
+  }
+
+  if(localStorage.getItem('theme') === 'light') {
+    document.documentElement.classList.remove('dark')
+  } else if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.classList.add('dark')
+  } else {
+    localStorage.setItem('theme', 'light')
+  }
   return (
-    <div className="absolute w-[90%] max-w-[350px] bg-blue-500 dark:bg-gray-950 overflow-hidden shadow-md rounded-[4px] transition-all duration-500 ease-in right-[5%] top-[100%]">
-      <div className="flex absolute items-center top-[20px] right-[20px] cursor-pointer bg-gray-400 w-[45px] px-[3px] rounded-[15px] py-[2px]">
+    <div  className={`absolute w-[90%] max-w-[350px] bg-blue-500 dark:bg-dark-100 overflow-hidden shadow-md rounded-[4px] transition-all duration-500 ease-in right-[5%] top-[108%] 
+    ${showOptions ? 'max-h-[500px]' : 'max-h-0'}
+    `} >
+      <div
+      onClick={handleTheme}
+      className="flex absolute items-center top-[20px] right-[20px] cursor-pointer bg-gray-400 w-[45px] px-[3px] rounded-[15px] py-[2px]">
         <span
           className={`w-[18px] h-[18px] bg-blue-500 dark:bg-gray-950 rounded-full inline-block ${
             toggle ? "ml-0 bg-black" : "ml-[20px] bg-white"
           } ease-in duration-300`}
         ></span>
+        
       </div>
-      <div>
-        <div>
+      <div className="p-[20px]">
+        <div className="flex items-center">
             <div className="relative max-w-[50px] w-[45px] h-[45px] mr-[12px]">
               <Image 
               src={`${process.env.NEXT_PUBLIC_API_URL}${image}`}
@@ -47,10 +73,15 @@ export const UserInformation = ({image, id, firstName, lastName}: Props) => {
             </div>
             <div>
                 <p className="text-white font-semibold"> Give Feedback</p>
-                <Link className="text-white font-semibold " href={'#'}>Help us improve our services</Link>
+                <Link
+                     href={'#'}
+                     className="text-sky-100/70 dark:text-white/40 text-sm"
+                  >
+                     Help us improve our services
+                  </Link>
             </div>
         </div>
-        <hr  className="border-0 h-[1px] my-15px mx-0 bg-gray-200/50" />
+        <hr  className="border-0 h-[1px] my-[15px] mx-0 bg-gray-200/50" />
         <button onClick={()=> dispatch(logoutRedux())} className="bg-red-500 hover:bg-red-400 py-1 px-2 text-white cursor-pointer rounded-md">Logout</button>
 
       </div>

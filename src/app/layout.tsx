@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className='dark'>
+    <html lang="en">
       <body className= {`${inter.className} bg-gray-100 text-black dark:bg-dark-200 dark:text-white transition-colors ease-in duration-300`}>
         <main >
          <ReduxProvider>
