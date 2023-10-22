@@ -1,6 +1,6 @@
-import Image from 'next/image'
-import React from 'react'
 
+import React from 'react'
+import  Image  from 'next/image'
 interface Props {
     image:string,
     show:  () => void
@@ -13,7 +13,7 @@ export const ProfilePicture = ({image, show} : Props) => {
         onClick={show}
         >
             <Image
-            src={`${process.env.NEXT_PUBLIC_API_URL}/${image}`}
+            src={`${process.env.NEXT_PUBLIC_API_URL}${image}`}
             alt='ProfilePicture'
             fill
             loading='lazy'

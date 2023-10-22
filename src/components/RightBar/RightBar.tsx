@@ -25,7 +25,7 @@ Sponsored
 </div>
 <div className='relative w-fit max-w-[270px] h-[150px] mt-4 mx-auto aspect-video'>
 <Image 
-src={'/ive-pepsi.png'}
+src={'/ive-pepsi.jpg'}
 alt='#'
 fill
 loading='lazy'
