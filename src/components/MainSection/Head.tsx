@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import  {AiFillCaretDown} from 'react-icons/ai'
+
 interface Props {
   image: string;
   id: number;
@@ -22,6 +24,16 @@ export const Head = ({ image, id, author }: Props) => {
           />
         </div>
       </Link>
+      <div className="ml-4">
+        <Link href={`/profile/${id}`}
+        className="-mb-[5px] text-black/70 dark:text-white font-bold text-lg block capitalize"
+        >
+            {author}
+        </Link>
+        <small className="text-black/80 dark:text-white/80">Public  <AiFillCaretDown 
+        className="text-black/80 dark:text-white text-[15px] ml-1 inline-block"
+        /> </small>
+      </div>
     </div>
   );
 };
