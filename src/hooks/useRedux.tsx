@@ -7,6 +7,7 @@ export const useRedux = () => {
 
   const { user: userLogged } = useAppSelector((state) => state.auth);
   const { users } = useAppSelector((state) => state.user);
+  const { value: hasMore } = useAppSelector((state) => state.hasMore);
 
-  return { posts, userLogged, dispatch, users };
+  return { posts, userLogged, dispatch, users, hasMore };
 };

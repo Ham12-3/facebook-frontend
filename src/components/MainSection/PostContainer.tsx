@@ -22,6 +22,7 @@ export const PostContainer = () => {
         {posts.map((post, index) => {
           return (
             <motion.div
+              key={post.id}
               variants={variants}
               initial="hidden"
               animate={"visible"}
