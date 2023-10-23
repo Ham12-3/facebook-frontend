@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRedux } from "@/hooks/useRedux";
 import { usePost } from "@/hooks/usePost";
+import { PostHeadContainer } from "./PostHeadContainer";
 
 const variants = {
   hidden: { opacity: 0, x: 100 },
@@ -28,7 +29,11 @@ export const PostContainer = () => {
               animate={"visible"}
               exit={"hidden"}
             >
-              {post.author}
+              <PostHeadContainer
+                authorId={post.author_id}
+                post={post}
+                authorUsername={post.author}
+              />
             </motion.div>
           );
         })}
