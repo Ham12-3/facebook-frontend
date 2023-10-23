@@ -3,10 +3,14 @@
 import React, { ChangeEvent, useState, useRef, FormEvent } from "react";
 import { Head } from "./Head";
 import { Multimedia } from "./Multimedia";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+
 import Image from "next/image";
 import { BsFillImageFill } from "react-icons/bs";
 import { createPost } from "@/services/post";
+import toast from "react-hot-toast";
+import { addPostRedux } from "@/redux/reducers/post.slice";
+import { useRedux } from "@/hooks/useRedux";
+
 export const CreatePost = () => {
   const [image, setImage] = useState<File>();
   const [prevImage, setPrevImage] = useState();
@@ -15,8 +19,7 @@ export const CreatePost = () => {
   const imageRef = useRef<HTMLInputElement>(null);
   const openFormRef = useRef<HTMLDialogElement>(null);
 
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const { dispatch, user, posts } = useRedux();
 
   const fileSelected = (e: ChangeEvent<HTMLInputElement>) => {
     setImage(e.target.files![0]);
@@ -35,30 +38,34 @@ export const CreatePost = () => {
       e.clientX > dialogDimensions!.right ||
       e.clientY > dialogDimensions!.bottom ||
       e.clientX < dialogDimensions!.left ||
-      e.clinetY < dialogDimensions!.top
+      e.clientY < dialogDimensions!.top
     ) {
       openFormRef.current!.close();
     }
   };
 
-
-
-
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const formData = new FormData()
-      formData.append('description', description)
-      formData.append('image', image! || '')
-      formData.append('author', user!.id.toString())
+      const formData = new FormData();
+      formData.append("description", description);
+      formData.append("image", image! || "");
+      formData.append("author", user!.id.toString());
 
-      const newPost = await createPost(formData)
-    } catch (error) {
+      const newPost = await createPost(formData);
+      dispatch(addPostRedux(newPost));
 
-    }
-  }
+      toast.success("Post created succesfully", { duration: 2500 });
+      setDescription("");
+      setImage(undefined);
+      setPrevImage(undefined);
 
 
+
+      openFormRef.current!.close()
+
+    } catch (error) { }
+  };
 
   return (
     <div>
@@ -77,9 +84,7 @@ export const CreatePost = () => {
         ref={openFormRef}
         className="bg-transparent backdrop:bg-black/70"
       >
-        <form className="form" action=""
-          onSubmit={handleSubmit}
-        >
+        <form className="form" action="" onSubmit={handleSubmit}>
           <textarea
             name="description"
             placeholder="Description"
@@ -115,6 +120,7 @@ export const CreatePost = () => {
               />
             </div>
           )}
+          <button className="formButton">Submit</button>
         </form>
       </dialog>
     </div>
