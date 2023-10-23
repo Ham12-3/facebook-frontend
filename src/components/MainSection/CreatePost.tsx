@@ -7,7 +7,7 @@ import { Multimedia } from "./Multimedia";
 import Image from "next/image";
 import { BsFillImageFill } from "react-icons/bs";
 import { createPost } from "@/services/post";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { addPostRedux } from "@/redux/reducers/post.slice";
 import { useRedux } from "@/hooks/useRedux";
 
@@ -19,7 +19,7 @@ export const CreatePost = () => {
   const imageRef = useRef<HTMLInputElement>(null);
   const openFormRef = useRef<HTMLDialogElement>(null);
 
-  const { dispatch, user, posts } = useRedux();
+  const { dispatch, userLogged } = useRedux();
 
   const fileSelected = (e: ChangeEvent<HTMLInputElement>) => {
     setImage(e.target.files![0]);
@@ -50,7 +50,7 @@ export const CreatePost = () => {
       const formData = new FormData();
       formData.append("description", description);
       formData.append("image", image! || "");
-      formData.append("author", user!.id.toString());
+      formData.append("author", userLogged!.id.toString());
 
       const newPost = await createPost(formData);
       dispatch(addPostRedux(newPost));
@@ -60,16 +60,21 @@ export const CreatePost = () => {
       setImage(undefined);
       setPrevImage(undefined);
 
-
-
-      openFormRef.current!.close()
-
-    } catch (error) { }
+      openFormRef.current!.close();
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong", { duration: 2500 });
+      openFormRef.current!.close();
+    }
   };
 
   return (
     <div>
-      <Head id={user!.id} image={user!.image} author={user!.username} />
+      <Head
+        id={userLogged!.id}
+        image={userLogged!.image}
+        author={userLogged!.username}
+      />
       <div className="px-[15px] pt-[20px]">
         <button
           onClick={() => openFormRef.current!.showModal()}
@@ -123,6 +128,7 @@ export const CreatePost = () => {
           <button className="formButton">Submit</button>
         </form>
       </dialog>
+      <Toaster />
     </div>
   );
 };

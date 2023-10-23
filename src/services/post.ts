@@ -8,3 +8,13 @@ export const createPost = async(post: FormData) => {
     })
     return data;
 }
+
+
+export const getPosts = async (page:number, page_size:number) =>  {
+const {data} = await API.get(`posts/?page=${page}&page_size=${page_size}`, {
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem('access')}`,
+    }
+})
+return data
+}
