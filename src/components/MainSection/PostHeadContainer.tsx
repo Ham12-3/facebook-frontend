@@ -28,7 +28,7 @@ export const PostHeadContainer = ({
 
   const [prevImage, setPrevImage] = useState<string>();
 
-  const { userLogged, dispatch } = useRedux();
+  const { userLogged, dispatch, posts: postsRedux } = useRedux();
 
   const setImageCallback = useCallback(
     (newImage: File | undefined) => {
@@ -70,10 +70,16 @@ export const PostHeadContainer = ({
     useModal();
 
   const handleOpenModal = (id: number) => {
-    const posToUpdate = posts.find((post) => post.id === id);
+    const postToUpdate = posts.find((post) => post.id === id);
     handleOpenUpdateModal(id);
 
-    setDescription(posToUpdate!.description);
+    setDescription(postToUpdate!.description);
+
+    if (postToUpdate?.image) {
+      image ?? setPrevImage(`${postToUpdate.image}`);
+    } else {
+      setPrevImage(undefined);
+    }
   };
 
   return (
@@ -111,21 +117,30 @@ export const PostHeadContainer = ({
 
           <div ref={showOptionsRef} className="relative hidden">
             <div className="absolute top-0 text-white right-1 bg-blue-500 dark:bg-gray-950 px-2 pt-1 pb-2">
-              <span className="cursor-pointer block mb-1">Update</span>
+              <span
+                className="cursor-pointer block mb-1"
+                onClick={() => handleOpenModal(post.id)}
+              >
+                Update
+              </span>
               <span className="cursor-pointer block">Delete</span>
             </div>
           </div>
         </button>
       )}
 
-      <ModalUpdate
-        setImage={setImageCallback}
-        image={image}
-        setPrevImage={setPrevImageCallback}
-        prevImage={prevImage}
-        setDescription={setDescriptionCallback}
-        description={description}
-      />
+      {showModalUpdate === post.id && (
+        <ModalUpdate
+          setImage={setImageCallback}
+          image={image}
+          setPrevImage={setPrevImageCallback}
+          prevImage={prevImage}
+          setDescription={setDescriptionCallback}
+          description={description}
+          handleCloseUpdateModal={handleCloseUpdateModal}
+          post={post}
+        />
+      )}
     </div>
   );
 };

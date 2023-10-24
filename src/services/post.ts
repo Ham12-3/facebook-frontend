@@ -18,3 +18,12 @@ const {data} = await API.get(`posts/?page=${page}&page_size=${page_size}`, {
 })
 return data
 }
+
+export const updatePost= async(post:FormData, id:number) => {
+   const {data}=  await API.put(`posts/${id}/`, post, {
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem('access')}`,
+    }
+} )
+return data
+}
