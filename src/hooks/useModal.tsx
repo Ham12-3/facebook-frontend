@@ -10,7 +10,7 @@ export const useModal = () => {
   const handleCloseModal = () => {
     setShowModalIndex(-1);
   };
-  return { showModalIndex, handleOpenModal, handleCloseModal };
+  return [showModalIndex, handleOpenModal, handleCloseModal];
 };
 
 // add wordpress

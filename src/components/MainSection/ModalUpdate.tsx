@@ -2,13 +2,23 @@ import Image from "next/image";
 import React, { useState, ChangeEvent, useRef } from "react";
 import { BsFillImageFill } from "react-icons/bs";
 
-export const ModalUpdate = () => {
-  const [description, setDescription] = useState("");
+interface Props {
+  image: File | undefined;
+  description: string;
+  setImage: (image: File | undefined) => void;
+  setDescription: (description: string) => void;
+  prevImage: string | undefined;
+  setPrevImage: (newPrevImage: string | undefined) => void;
+}
 
-  const [image, setImage] = useState<File>();
-
-  const [prevImage, setPrevImage] = useState();
-
+export const ModalUpdate = ({
+  image,
+  description,
+  prevImage,
+  setImage,
+  setDescription,
+  setPrevImage,
+}: Props) => {
   const imageRef = useRef<HTMLInputElement>(null);
 
   const fileSelected = (e: ChangeEvent<HTMLInputElement>) => {

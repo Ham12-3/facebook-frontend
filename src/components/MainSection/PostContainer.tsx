@@ -32,6 +32,7 @@ export const PostContainer = () => {
               <PostHeadContainer
                 authorId={post.author_id ?? userLogged!.id}
                 post={post}
+                posts={posts}
                 authorUsername={
                   typeof post.author === "number"
                     ? userLogged!.username

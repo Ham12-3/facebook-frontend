@@ -1,24 +1,55 @@
 import { Post } from "@/interface/interface";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { parseISO, formatDistance } from "date-fns";
 import { useRedux } from "@/hooks/useRedux";
 import { BsThreeDots } from "react-icons/bs";
 import { ModalUpdate } from "./ModalUpdate";
+import { useModal } from "@/hooks/useModal";
 
 interface Props {
   authorId: number;
   post: Post;
   authorUsername: string;
+  posts: Post[];
 }
 
 export const PostHeadContainer = ({
   authorId,
   authorUsername,
   post,
+  posts,
 }: Props) => {
+  // Form
+  const [description, setDescription] = useState("");
+
+  const [image, setImage] = useState<File>();
+
+  const [prevImage, setPrevImage] = useState<string>();
+
   const { userLogged, dispatch } = useRedux();
+
+  const setImageCallback = useCallback(
+    (newImage: File | undefined) => {
+      setImage(newImage);
+    },
+    [image]
+  );
+
+  const setPrevImageCallback = useCallback(
+    (newPrevImage: string | undefined) => {
+      setPrevImage(newPrevImage);
+    },
+    [prevImage]
+  );
+
+  const setDescriptionCallback = useCallback(
+    (newDescription: string) => {
+      setDescription(newDescription);
+    },
+    [description]
+  );
 
   //    CRUD Ref
   const showOptionsRef = useRef<HTMLDivElement>(null);
@@ -32,6 +63,19 @@ export const PostHeadContainer = ({
       addSuffix: true,
     }
   );
+
+  // Modal
+
+  const [showModalUpdate, handleOpenUpdateModal, handleCloseUpdateModal] =
+    useModal();
+
+  const handleOpenModal = (id: number) => {
+    const posToUpdate = posts.find((post) => post.id === id);
+    handleOpenUpdateModal(id);
+
+    setDescription(posToUpdate!.description);
+  };
+
   return (
     <div className="flex items-center justify-between mb-3">
       <div className="flex items-center">
@@ -74,7 +118,14 @@ export const PostHeadContainer = ({
         </button>
       )}
 
-      <ModalUpdate />
+      <ModalUpdate
+        setImage={setImageCallback}
+        image={image}
+        setPrevImage={setPrevImageCallback}
+        prevImage={prevImage}
+        setDescription={setDescriptionCallback}
+        description={description}
+      />
     </div>
   );
 };
