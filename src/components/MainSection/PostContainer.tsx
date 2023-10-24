@@ -12,7 +12,7 @@ const variants = {
 };
 
 export const PostContainer = () => {
-  const { posts } = useRedux();
+  const { posts, userLogged } = useRedux();
   const { setPage } = usePost();
 
   useEffect(() => {}, []);
@@ -30,9 +30,13 @@ export const PostContainer = () => {
               exit={"hidden"}
             >
               <PostHeadContainer
-                authorId={post.author_id}
+                authorId={post.author_id ?? userLogged!.id}
                 post={post}
-                authorUsername={post.author}
+                authorUsername={
+                  typeof post.author === "number"
+                    ? userLogged!.username
+                    : post.author
+                }
               />
             </motion.div>
           );

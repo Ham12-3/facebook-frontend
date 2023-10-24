@@ -5,7 +5,7 @@ import { useRedux } from "./useRedux";
 import { getPostsRedux } from "@/redux/reducers/post.slice";
 import { hasNoMore } from "@/redux/reducers/hasMore";
 
-let PAGE_SIZE = 3;
+let PAGE_SIZE = 6;
 export const usePost = () => {
   const { dispatch, posts } = useRedux();
 
