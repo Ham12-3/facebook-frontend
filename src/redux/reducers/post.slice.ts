@@ -10,7 +10,7 @@ const postSlice = createSlice({
   initialState,
   reducers: {
     getPostsRedux: (state, { payload }) => {
-      state.posts = [...state.posts, ...payload];
+      state.posts = [...payload];
     },
     addPostRedux: (state, {payload}) => {
         state.posts= [payload, ...state.posts]

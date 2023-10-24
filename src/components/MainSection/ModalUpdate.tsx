@@ -55,7 +55,10 @@ export const ModalUpdate = ({
       setDescription("");
       setImage(undefined);
       setPrevImage(undefined);
-    } catch (error) {}
+      handleCloseUpdateModal();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

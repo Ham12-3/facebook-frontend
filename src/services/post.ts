@@ -27,3 +27,13 @@ export const updatePost= async(post:FormData, id:number) => {
 } )
 return data
 }
+
+export const deletePost = async(id:number) => {
+    const {data} = await API.delete(`posts/${id}`, {
+        headers : {
+            Authorization: `Bearer ${localStorage.getItem('access')}`
+        }
+    })
+
+    return data
+}

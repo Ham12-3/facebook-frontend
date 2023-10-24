@@ -1,15 +1,13 @@
 "use client";
-
-import React, { ChangeEvent, useState, useRef, FormEvent } from "react";
 import { Head } from "./Head";
 import { Multimedia } from "./Multimedia";
-
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import Image from "next/image";
 import { BsFillImageFill } from "react-icons/bs";
 import { createPost } from "@/services/post";
-import toast, { Toaster } from "react-hot-toast";
 import { addPostRedux } from "@/redux/reducers/post.slice";
 import { useRedux } from "@/hooks/useRedux";
+import toast, { Toaster } from "react-hot-toast";
 
 export const CreatePost = () => {
   const [image, setImage] = useState<File>();
@@ -54,8 +52,7 @@ export const CreatePost = () => {
 
       const newPost = await createPost(formData);
       dispatch(addPostRedux(newPost));
-
-      toast.success("Post created succesfully", { duration: 2500 });
+      toast.success("Post created successfully", { duration: 2500 });
       setDescription("");
       setImage(undefined);
       setPrevImage(undefined);
@@ -69,41 +66,45 @@ export const CreatePost = () => {
   };
 
   return (
-    <div>
+    <div className="w-full bg-gray-200/30 dark:bg-dark-50 rounded-[6px] p-[20px] transition-colors duration-300 ease-in">
       <Head
         id={userLogged!.id}
         image={userLogged!.image}
         author={userLogged!.username}
       />
+
       <div className="px-[15px] pt-[20px]">
         <button
-          onClick={() => openFormRef.current!.showModal()}
           className="w-full border-b-2 block text-slate-900/70 dark:text-white/80 border-slate-700/50 dark:border-gray-300 pb-3 text-[15px] cursor-pointer text-start my-3"
+          onClick={() => openFormRef.current!.showModal()}
         >
-          What's on your mind
+          What's on your mind?
         </button>
+
         <Multimedia />
       </div>
+
       <dialog
-        onMouseDown={closeDialog}
         ref={openFormRef}
         className="bg-transparent backdrop:bg-black/70"
+        onMouseDown={closeDialog}
       >
-        <form className="form" action="" onSubmit={handleSubmit}>
+        <form className="form" onSubmit={handleSubmit}>
+          <h1 className="text-5xl font-bold text-white">Create a Post</h1>
           <textarea
+            rows={5}
+            className="input resize-none"
             name="description"
             placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="input resize-none"
-            rows={5}
           />
+
           <input
             type="file"
             className="hidden"
             ref={imageRef}
             onChange={fileSelected}
-            id=""
           />
 
           {image === undefined && (
@@ -114,13 +115,14 @@ export const CreatePost = () => {
           )}
 
           {prevImage && (
-            <div className="w-[600px] max-w-[620px] h-[300px] mx-auto relative">
+            <div className="w-[600px] max-w-[620px] h-[300px] mx-auto relative cursor-pointer">
               <Image
                 src={prevImage}
                 alt="#"
                 fill
                 loading="lazy"
                 className="object-top object-cover"
+                sizes="(max-width: 620px) 100vw, 550px"
                 onClick={() => imageRef.current!.click()}
               />
             </div>
