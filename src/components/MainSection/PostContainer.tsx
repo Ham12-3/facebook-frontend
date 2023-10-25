@@ -1,11 +1,13 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useRedux } from "@/hooks/useRedux";
 import { usePost } from "@/hooks/usePost";
 import { PostHeadContainer } from "./PostHeadContainer";
 import { PostDescription } from "./PostDescription";
+import Loading from "@/app/loading";
+import Image from "next/image";
 
 const variants = {
   hidden: { opacity: 0, x: 100 },
@@ -42,6 +44,23 @@ export const PostContainer = () => {
               }
             />
             <PostDescription description={post.description} />
+
+            {/* Image  */}
+
+            <Suspense fallback={<Loading />}>
+              <div className="relative w-full max-w-[700px] h-[330px] mb-[5px]">
+                <Image
+                  alt="#"
+                  fill
+                  loading="lazy"
+                  placeholder="blur"
+                  blurDataURL="/blur.svg"
+                  sizes="(max-width: 720px) 100vw, 700px, 500px, 300px"
+                  src={`${post.image}`}
+                  className="object-cover object-top cursor-pointer rounded-[5px]"
+                />
+              </div>
+            </Suspense>
           </motion.div>
         );
       })}

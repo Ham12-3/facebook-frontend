@@ -21,10 +21,13 @@ const postSlice = createSlice({
      if(index !== -1) {
       state.posts[index] = payload
      }
+    }, 
+    deletePostRedux: (state, {payload}) => {
+      state.posts= state.posts.filter(post => post.id !== payload)
     }
   },
 });
 
 
 export default  postSlice.reducer
-export const {addPostRedux, getPostsRedux, updatePostRedux} = postSlice.actions
+export const {addPostRedux, getPostsRedux, updatePostRedux, deletePostRedux} = postSlice.actions

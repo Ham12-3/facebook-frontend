@@ -7,6 +7,9 @@ import { useRedux } from "@/hooks/useRedux";
 import { BsThreeDots } from "react-icons/bs";
 import { ModalUpdate } from "./ModalUpdate";
 import { useModal } from "@/hooks/useModal";
+import { deletePost } from "@/services/post";
+import toast, { Toaster } from "react-hot-toast";
+import { deletePostRedux } from "@/redux/reducers/post.slice";
 
 interface Props {
   authorId: number;
@@ -82,6 +85,21 @@ export const PostHeadContainer = ({
     }
   };
 
+  // Delete
+  const handleDelete = async (id: number) => {
+    try {
+      const { message } = await deletePost(id);
+      toast.success(message, {
+        duration: 2100,
+        style: { background: "white", color: "red" },
+        iconTheme: { primary: "red", secondary: "white" },
+      });
+      dispatch(deletePostRedux(id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="flex items-center justify-between mb-3">
       <div className="flex items-center">
@@ -123,7 +141,12 @@ export const PostHeadContainer = ({
               >
                 Update
               </span>
-              <span className="cursor-pointer block">Delete</span>
+              <span
+                onClick={() => handleDelete(post.id)}
+                className="cursor-pointer block"
+              >
+                Delete
+              </span>
             </div>
           </div>
         </button>
