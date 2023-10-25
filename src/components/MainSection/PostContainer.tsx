@@ -8,6 +8,7 @@ import { PostHeadContainer } from "./PostHeadContainer";
 import { PostDescription } from "./PostDescription";
 import Loading from "@/app/loading";
 import Image from "next/image";
+import { Likes } from "./Likes";
 
 const variants = {
   hidden: { opacity: 0, x: 100 },
@@ -31,7 +32,7 @@ export const PostContainer = () => {
             initial="hidden"
             animate={"visible"}
             exit={"hidden"}
-            className="w-full bg-gray-200/30 dark:bg-dark-50 p-[20px] shadow-md text-gray-400 rounded-[6px] my-5 transition-colors duration-300 ease-in"
+            className="w-full bg-gray-200/30 dark:bg-black p-[20px] shadow-md text-gray-400 rounded-[6px] my-5 transition-colors duration-300 ease-in"
           >
             <PostHeadContainer
               authorId={post.author_id ?? userLogged!.id}
@@ -48,19 +49,26 @@ export const PostContainer = () => {
             {/* Image  */}
 
             <Suspense fallback={<Loading />}>
-              <div className="relative w-full max-w-[700px] h-[330px] mb-[5px]">
-                <Image
-                  alt="#"
-                  fill
-                  loading="lazy"
-                  placeholder="blur"
-                  blurDataURL="/blur.svg"
-                  sizes="(max-width: 720px) 100vw, 700px, 500px, 300px"
-                  src={`${post.image}`}
-                  className="object-cover object-top cursor-pointer rounded-[5px]"
-                />
-              </div>
+              {post.image !== null && (
+                <div className="relative w-full max-w-[700px] h-[330px] mb-[5px]">
+                  <Image
+                    alt="#"
+                    fill
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL="/blur.svg"
+                    sizes="(max-width: 720px) 100vw, 700px, 500px, 300px"
+                    src={`${process.env.NEXT_PUBLIC_API_URL}${post.image}`}
+                    className="object-cover object-top cursor-pointer rounded-[5px]"
+                  />
+                </div>
+              )}
             </Suspense>
+            <Likes
+              likes={post.likes}
+              likesCount={post.likes.length}
+              postId={post.id}
+            />
           </motion.div>
         );
       })}

@@ -32,15 +32,14 @@ export const ModalUpdate = ({
 
   const { dispatch } = useRedux();
 
-  const fileSelected = (e: ChangeEvent<HTMLInputElement>) => {
+  const fileSelected = (
+    e: ChangeEvent<HTMLInputElement>,
+    postImage: string
+  ) => {
     setImage(e.target.files![0]);
 
-    const reader: any = new FileReader();
-    reader.readAsDataURL(e.target.files![0]);
-
-    reader.onloadend = () => {
-      setPrevImage(reader.result);
-    };
+    const newPrev = URL.createObjectURL(e.target.files![0]);
+    setPrevImage(newPrev);
   };
 
   const handleSubmit = async (e: FormEvent, postId: number) => {
@@ -84,7 +83,7 @@ export const ModalUpdate = ({
             type="file"
             className="hidden"
             ref={imageRef}
-            onChange={fileSelected}
+            onChange={(e) => fileSelected(e, post.image)}
           />
 
           {image === undefined && prevImage === undefined && (
@@ -97,7 +96,11 @@ export const ModalUpdate = ({
           {prevImage && (
             <div className="w-[600px] max-w-[620px] h-[300px] mx-auto relative cursor-pointer">
               <Image
-                src={prevImage}
+                src={
+                  prevImage.startsWith("blob:")
+                    ? prevImage
+                    : `${process.env.NEXT_PUBLIC_API_URL}${prevImage}`
+                }
                 alt="#"
                 fill
                 loading="lazy"
