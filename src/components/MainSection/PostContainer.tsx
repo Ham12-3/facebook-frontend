@@ -70,7 +70,7 @@ export const PostContainer = () => {
               likesCount={post.likes.length}
               postId={post.id}
             />
-            <ImageModal post={post} />
+            <ImageModal post={post} posts={posts} />
           </motion.div>
         );
       })}
