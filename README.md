@@ -1,5 +1,4 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
 First, run the development server:
@@ -34,3 +33,12 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+
+![django-4](https://github.com/Ham12-3/facebook-frontend/assets/93613316/8fee43a2-3a26-4c30-bb19-457bdbfd6494)
+![django-3-1](https://github.com/Ham12-3/facebook-frontend/assets/93613316/967d6667-6ff3-4e58-ae8d-7ec61a37e071)
+![django-3](https://github.com/Ham12-3/facebook-frontend/assets/93613316/1b79f922-f51f-459e-9c83-f92811e13943)
+![django-2](https://github.com/Ham12-3/facebook-frontend/assets/93613316/1a995fb6-e6bf-4351-8621-beeb61e4cc05)
+
+
