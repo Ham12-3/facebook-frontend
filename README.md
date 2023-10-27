@@ -41,4 +41,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ![django-3](https://github.com/Ham12-3/facebook-frontend/assets/93613316/1b79f922-f51f-459e-9c83-f92811e13943)
 ![django-2](https://github.com/Ham12-3/facebook-frontend/assets/93613316/1a995fb6-e6bf-4351-8621-beeb61e4cc05)
 
+![django-5](https://github.com/Ham12-3/facebook-frontend/assets/93613316/756b7666-6e23-426b-a30b-b3754d403e0f)
 
