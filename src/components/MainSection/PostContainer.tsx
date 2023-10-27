@@ -9,6 +9,7 @@ import { PostDescription } from "./PostDescription";
 import Loading from "@/app/loading";
 import Image from "next/image";
 import { Likes } from "./Likes";
+import { ImageModal } from "./ImageModal";
 
 const variants = {
   hidden: { opacity: 0, x: 100 },
@@ -69,6 +70,7 @@ export const PostContainer = () => {
               likesCount={post.likes.length}
               postId={post.id}
             />
+            <ImageModal post={post} />
           </motion.div>
         );
       })}
