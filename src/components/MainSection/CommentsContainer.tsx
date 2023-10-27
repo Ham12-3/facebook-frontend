@@ -1,8 +1,10 @@
-import React, { useRef } from "react";
+import React, { FormEvent, useRef } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRedux } from "@/hooks/useRedux";
 import { Comment, Post } from "@/interface/interface";
+
+import { formatDistance, parseISO } from "date-fns";
 
 const variants = {
   hidden: { opacity: 0, y: -100 },
@@ -11,8 +13,15 @@ const variants = {
 
 export const CommentsContainer = () => {
   const { comments: CommentsRedux } = useRedux();
+  //   console.log(CommentsRedux);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleComment = (e: FormEvent) => {
+    e.preventDefault();
+    try {
+    } catch (error) {}
+  };
 
   return (
     <>
@@ -36,8 +45,15 @@ export const CommentsContainer = () => {
         </form>
 
         {CommentsRedux.map((comment: Comment, index) => {
+          const date = formatDistance(
+            parseISO(comment.updated_at.toString()),
+            Date.now(),
+            { addSuffix: true }
+          );
+
           return (
             <motion.div
+              key={index}
               initial="hidden"
               animate="visible"
               exit="hidden"
@@ -46,9 +62,28 @@ export const CommentsContainer = () => {
             >
               <div className="my-6 flex items-center gap-x-4">
                 <div className="w-[50px] h-[50px] aspect-square relative">
-                  {/* <Image src={} alt="#" />   */}
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_API_URL}${comment.author_image}`}
+                    alt="#"
+                    fill
+                    loading="lazy"
+                    sizes="(max-width: 50px) 100vw"
+                    className="object-cover object-top rounded-full "
+                  />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-black/70 dark:text-white/80 capitalize">
+                    {comment.author}
+                  </h4>
+                  <small className="text-xs text-black/50 dark:text-white/50">
+                    {date}
+                  </small>
                 </div>
               </div>
+
+              <p className="text-[15px] text-black/70 dark:text-white/70">
+                {comment.text}
+              </p>
             </motion.div>
           );
         })}

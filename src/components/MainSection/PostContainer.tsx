@@ -35,7 +35,9 @@ export const PostContainer = () => {
     handleOpenImageModal(id);
 
     const response: Post = await getPost(id);
+    console.log(response);
     const sortComments = [...response.comments].sort((a, b) => b.id - a.id);
+    // console.log(sortComments);
     dispatch(getCommentsRedux(sortComments));
   };
 
