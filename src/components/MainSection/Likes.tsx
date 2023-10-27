@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "./Button";
 import { useRedux } from "@/hooks/useRedux";
+import { addLike, removeLike } from "@/services/like";
 
 interface Props {
   likesCount: number;
@@ -19,14 +20,29 @@ export const Likes = ({ likesCount, likes, postId }: Props) => {
   const [likes_Count, setLikes_Count] = useState(likesCount);
   4;
 
-  const handleLike = () => {
+  const handleLike = async () => {
     try {
-    } catch (error) {}
+      await addLike(postId);
+      setLikes_Count((prev) => prev + 1);
+      setLiked(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleRemoveLike = async () => {
+    try {
+      await removeLike(postId);
+      setLikes_Count((prev) => prev - 1);
+      setLiked(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <div className="flex items-center justify-between">
-      <div>
+      <div onClick={liked ? handleRemoveLike : handleLike}>
         <Button liked={liked} likesCount={likes_Count} />
       </div>
     </div>

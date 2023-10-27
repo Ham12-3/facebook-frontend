@@ -9,7 +9,7 @@ interface Props {
 
 export const Button = ({ liked, likesCount }: Props) => {
   return (
-    <div>
+    <div className="inline-flex items-center mr-[30px] cursor-pointer">
       {liked ? (
         <AiFillLike className="mr-2 text-[22px] text-blue-500" />
       ) : (
