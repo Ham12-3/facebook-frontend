@@ -1,4 +1,11 @@
 import React, { useRef } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+
+const variants = {
+  hidden: { opacity: 0, y: -100 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+};
 
 export const CommentsContainer = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -23,6 +30,20 @@ export const CommentsContainer = () => {
             Submit
           </button>
         </form>
+
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          variants={variants}
+          className="bg-gray-300/70 dark:bg-black/30 px-6 pt-[1px] pb-2 mt-4 rounded-lg h-fit"
+        >
+          <div className="my-6 flex items-center gap-x-4">
+            <div className="w-[50px] h-[50px] aspect-square relative">
+              <Image />
+            </div>
+          </div>
+        </motion.div>
       </div>
     </>
   );

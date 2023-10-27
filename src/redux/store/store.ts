@@ -1,22 +1,22 @@
-import  {configureStore} from '@reduxjs/toolkit'
+import { configureStore } from "@reduxjs/toolkit";
 
-import authReducer from '@/redux/reducers/auth.slice'
-import userReducer from '@/redux/reducers/user.slice'
-import postReducer from '@/redux/reducers/post.slice'
-import hasMoreReducer from '@/redux/reducers/hasMore'
+import authReducer from "@/redux/reducers/auth.slice";
+import userReducer from "@/redux/reducers/user.slice";
+import postReducer from "@/redux/reducers/post.slice";
+import hasMoreReducer from "@/redux/reducers/hasMore";
+import commentReducer from "@/redux/reducers/comment.slice";
 const store = configureStore({
-    reducer : {
-        auth: authReducer,
-        user: userReducer,
-        post: postReducer,
-        hasMore: hasMoreReducer,
-
-    }
-})
+  reducer: {
+    auth: authReducer,
+    user: userReducer,
+    post: postReducer,
+    hasMore: hasMoreReducer,
+    comment: commentReducer,
+  },
+});
 
 export type RootState = ReturnType<typeof store.getState>;
 
-export type AppDispatch = typeof store.dispatch
+export type AppDispatch = typeof store.dispatch;
 
-
-export default store
+export default store;

@@ -37,3 +37,12 @@ export const deletePost = async(id:number) => {
 
     return data
 }
+
+export const getPost = async(id:number)=> {
+    const {data} = await API.get(`posts/${id}/`,{
+        headers : {
+            Authorization: `Bearer ${localStorage.getItem('access')}`
+        }
+    })
+    return data
+}

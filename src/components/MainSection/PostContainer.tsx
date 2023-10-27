@@ -10,6 +10,13 @@ import Loading from "@/app/loading";
 import Image from "next/image";
 import { Likes } from "./Likes";
 import { ImageModal } from "./ImageModal";
+import { useModal } from "@/hooks/useModal";
+import { getPost } from "@/services/post";
+import { Post } from "@/interface/interface";
+import {
+  getCommentsRedux,
+  removeCommentsRedux,
+} from "@/redux/reducers/comment.slice";
 
 const variants = {
   hidden: { opacity: 0, x: 100 },
@@ -17,9 +24,25 @@ const variants = {
 };
 
 export const PostContainer = () => {
-  const { posts, userLogged } = useRedux();
+  const { posts, userLogged, dispatch } = useRedux();
   // console.log(posts);
   const { setPage } = usePost();
+
+  const [showImageModalIndex, handleOpenImageModal, handleCloseImageModal] =
+    useModal();
+
+  const handleOpenImage = async (id: number) => {
+    handleOpenImageModal(id);
+
+    const response: Post = await getPost(id);
+    const sortComments = [...response.comments].sort((a, b) => b.id - a.id);
+    dispatch(getCommentsRedux(sortComments));
+  };
+
+  const handleCloseImage = () => {
+    handleCloseImageModal();
+    dispatch(removeCommentsRedux());
+  };
 
   // useEffect(() => {}, []);
 
@@ -51,7 +74,10 @@ export const PostContainer = () => {
 
             <Suspense fallback={<Loading />}>
               {post.image !== null && (
-                <div className="relative w-full max-w-[700px] h-[330px] mb-[5px]">
+                <div
+                  className="relative w-full max-w-[700px] h-[330px] mb-[5px]"
+                  onClick={() => handleOpenImage(post.id)}
+                >
                   <Image
                     alt="#"
                     fill
@@ -70,7 +96,11 @@ export const PostContainer = () => {
               likesCount={post.likes.length}
               postId={post.id}
             />
-            <ImageModal post={post} posts={posts} />
+            <ImageModal
+              post={post}
+              posts={posts}
+              showModal={showImageModalIndex === post.id}
+            />
           </motion.div>
         );
       })}
