@@ -1,6 +1,8 @@
 import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useRedux } from "@/hooks/useRedux";
+import { Comment, Post } from "@/interface/interface";
 
 const variants = {
   hidden: { opacity: 0, y: -100 },
@@ -8,6 +10,8 @@ const variants = {
 };
 
 export const CommentsContainer = () => {
+  const { comments: CommentsRedux } = useRedux();
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   return (
@@ -31,19 +35,23 @@ export const CommentsContainer = () => {
           </button>
         </form>
 
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          exit="hidden"
-          variants={variants}
-          className="bg-gray-300/70 dark:bg-black/30 px-6 pt-[1px] pb-2 mt-4 rounded-lg h-fit"
-        >
-          <div className="my-6 flex items-center gap-x-4">
-            <div className="w-[50px] h-[50px] aspect-square relative">
-              <Image />
-            </div>
-          </div>
-        </motion.div>
+        {CommentsRedux.map((comment: Comment, index) => {
+          return (
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={variants}
+              className="bg-gray-300/70 dark:bg-black/30 px-6 pt-[1px] pb-2 mt-4 rounded-lg h-fit"
+            >
+              <div className="my-6 flex items-center gap-x-4">
+                <div className="w-[50px] h-[50px] aspect-square relative">
+                  {/* <Image src={} alt="#" />   */}
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
     </>
   );

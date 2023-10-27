@@ -75,7 +75,7 @@ export const PostContainer = () => {
             <Suspense fallback={<Loading />}>
               {post.image !== null && (
                 <div
-                  className="relative w-full max-w-[700px] h-[330px] mb-[5px]"
+                  className="relative w-full max-w-[800px] h-[330px] mb-[5px]"
                   onClick={() => handleOpenImage(post.id)}
                 >
                   <Image
@@ -84,7 +84,7 @@ export const PostContainer = () => {
                     loading="lazy"
                     placeholder="blur"
                     blurDataURL="/blur.svg"
-                    sizes="(max-width: 720px) 100vw, 700px, 500px, 300px"
+                    sizes="(max-width: 800px) 100vw, 700px, 500px, 300px"
                     src={`${process.env.NEXT_PUBLIC_API_URL}${post.image}`}
                     className="object-cover object-top cursor-pointer rounded-[5px]"
                   />
@@ -100,6 +100,7 @@ export const PostContainer = () => {
               post={post}
               posts={posts}
               showModal={showImageModalIndex === post.id}
+              handleCloseImage={handleCloseImage}
             />
           </motion.div>
         );
