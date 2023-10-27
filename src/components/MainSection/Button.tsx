@@ -1,6 +1,5 @@
-import React from "react";
-
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
+import { Comment } from "./Comment";
 
 interface Props {
   liked: boolean;
@@ -15,13 +14,15 @@ export const Button = ({ liked, likesCount }: Props) => {
       ) : (
         <AiOutlineLike className="mr-2 text-[22px] text-gray-500" />
       )}
-
       <span
         className={`${likesCount === 0 ? "text-gray-500" : "text-blue-500"}`}
       >
-        {" "}
-        {likesCount}{" "}
+        {likesCount}
       </span>
+
+      <div onClick={(e) => e.stopPropagation()}>
+        <Comment />
+      </div>
     </div>
   );
 };

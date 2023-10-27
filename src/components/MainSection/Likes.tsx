@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Button } from "./Button";
 import { useRedux } from "@/hooks/useRedux";
+import { Button } from "./Button";
+import { useState } from "react";
 import { addLike, removeLike } from "@/services/like";
 
 interface Props {
@@ -11,14 +11,11 @@ interface Props {
 
 export const Likes = ({ likesCount, likes, postId }: Props) => {
   const { userLogged } = useRedux();
-
   const [liked, setLiked] = useState(() => {
     if (likes.includes(userLogged!.username)) return true;
     return false;
   });
-
   const [likes_Count, setLikes_Count] = useState(likesCount);
-  4;
 
   const handleLike = async () => {
     try {
