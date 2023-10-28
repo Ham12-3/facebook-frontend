@@ -1,27 +1,28 @@
-import { useRedux } from "@/hooks/useRedux";
-import { Post } from "@/interface/interface";
-import { updatePostRedux } from "@/redux/reducers/post.slice";
-import { updatePost } from "@/services/post";
 import Image from "next/image";
-import React, { useState, ChangeEvent, useRef, FormEvent } from "react";
 import toast from "react-hot-toast";
+import { useRedux } from "@/hooks/useRedux";
+import { updatePost } from "@/services/post";
+import { Post } from "@/interface/interface";
 import { BsFillImageFill } from "react-icons/bs";
+import { ChangeEvent, FormEvent, useRef } from "react";
+import { updatePostRedux } from "@/redux/reducers/post.slice";
+// import { updateProfilePost } from '@/redux/reducers/profilePosts.slice';
 
 interface Props {
-  image: File | undefined;
+  post: Post;
   description: string;
-  setImage: (newImage: File | undefined) => void;
-  setDescription: (description: string) => void;
+  image: File | undefined;
   prevImage: string | undefined;
+  setImage: (image: File | undefined) => void;
+  setDescription: (newDescription: string) => void;
   setPrevImage: (newPrevImage: string | undefined) => void;
   handleCloseUpdateModal: any;
-  post: Post;
 }
 
 export const ModalUpdate = ({
   image,
-  description,
   prevImage,
+  description,
   setImage,
   setDescription,
   setPrevImage,
@@ -29,15 +30,10 @@ export const ModalUpdate = ({
   post,
 }: Props) => {
   const imageRef = useRef<HTMLInputElement>(null);
+  const { dispatch, posts: postsRedux } = useRedux();
 
-  const { dispatch } = useRedux();
-
-  const fileSelected = (
-    e: ChangeEvent<HTMLInputElement>,
-    postImage: string
-  ) => {
+  const fileSelected = (e: ChangeEvent<HTMLInputElement>) => {
     setImage(e.target.files![0]);
-
     const newPrev = URL.createObjectURL(e.target.files![0]);
     setPrevImage(newPrev);
   };
@@ -46,11 +42,16 @@ export const ModalUpdate = ({
     e.preventDefault();
     try {
       const formData = new FormData();
-      formData.append("description", description || "");
+      formData.append("description", description);
       formData.append("image", image || "");
+
       const { data: postUpdated, message } = await updatePost(formData, postId);
+      console.log(postUpdated);
       toast.success(message, { duration: 2500 });
-      dispatch(updatePostRedux(postUpdated));
+
+      if (postsRedux.length > 0) dispatch(updatePostRedux(postUpdated));
+      //  else dispatch(updateProfilePost(postUpdated));
+
       setDescription("");
       setImage(undefined);
       setPrevImage(undefined);
@@ -59,31 +60,32 @@ export const ModalUpdate = ({
       console.log(error);
     }
   };
-
   return (
     <div
-      onClick={handleCloseUpdateModal}
       className="fixed top-0 right-0 w-full h-full bg-black/80 flex items-center justify-center z-[60]"
+      onClick={() => {
+        handleCloseUpdateModal();
+        setPrevImage(undefined);
+      }}
     >
-      <div onClick={(e) => e.stopPropagation()} className="">
-        <form
-          className="form"
-          action=""
-          onSubmit={(e) => handleSubmit(e, post.id)}
-        >
+      <div onClick={(e) => e.stopPropagation()}>
+        <form className="form" onSubmit={(e) => handleSubmit(e, post.id)}>
+          <h1 className="text-5xl font-bold text-white">Update your Post</h1>
           <textarea
+            autoFocus
+            rows={5}
+            className="input resize-none"
+            value={description}
             name="description"
             placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="input resize-none"
-            rows={5}
+            onChange={(e: any) => setDescription(e.target.value)}
           />
+
           <input
             type="file"
             className="hidden"
             ref={imageRef}
-            onChange={(e) => fileSelected(e, post.image)}
+            onChange={fileSelected}
           />
 
           {image === undefined && prevImage === undefined && (
@@ -104,9 +106,9 @@ export const ModalUpdate = ({
                 alt="#"
                 fill
                 loading="lazy"
+                sizes="(max-width: 620px) 100vw, 500px"
                 className="object-top object-cover"
                 onClick={() => imageRef.current!.click()}
-                sizes="(max-width: 620px) 100vw, 500px"
               />
             </div>
           )}

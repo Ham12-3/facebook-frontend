@@ -1,36 +1,34 @@
+import { useRedux } from "@/hooks/useRedux";
 import { Post } from "@/interface/interface";
+import { parseISO, formatDistance } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useCallback, useRef, useState } from "react";
-import { parseISO, formatDistance } from "date-fns";
-import { useRedux } from "@/hooks/useRedux";
+import { useCallback, useRef, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { ModalUpdate } from "./ModalUpdate";
 import { useModal } from "@/hooks/useModal";
 import { deletePost } from "@/services/post";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { deletePostRedux } from "@/redux/reducers/post.slice";
+// import { deleteProfilePost } from '@/redux/reducers/profilePosts.slice';
 
 interface Props {
-  authorId: number;
   post: Post;
-  authorUsername: string;
   posts: Post[];
+  authorId: number;
+  authorUsername: string;
 }
 
 export const PostHeadContainer = ({
   authorId,
-  authorUsername,
   post,
+  authorUsername,
   posts,
 }: Props) => {
-  // Form
-  const [description, setDescription] = useState("");
-
+  /* Form */
   const [image, setImage] = useState<File>();
-
+  const [description, setDescription] = useState("");
   const [prevImage, setPrevImage] = useState<string>();
-
   const { userLogged, dispatch, posts: postsRedux } = useRedux();
 
   const setImageCallback = useCallback(
@@ -39,7 +37,12 @@ export const PostHeadContainer = ({
     },
     [image]
   );
-
+  const setDescriptionCallback = useCallback(
+    (newDescription: string) => {
+      setDescription(newDescription);
+    },
+    [description]
+  );
   const setPrevImageCallback = useCallback(
     (newPrevImage: string | undefined) => {
       setPrevImage(newPrevImage);
@@ -47,28 +50,17 @@ export const PostHeadContainer = ({
     [prevImage]
   );
 
-  const setDescriptionCallback = useCallback(
-    (newDescription: string) => {
-      setDescription(newDescription);
-    },
-    [description]
-  );
-
-  //    CRUD Ref
+  /* CRUD ref */
   const showOptionsRef = useRef<HTMLDivElement>(null);
 
-  // Updated at
-
+  /* Updated_at */
   const date = formatDistance(
     parseISO(post.updated_at.toString()),
     Date.now(),
-    {
-      addSuffix: true,
-    }
+    { addSuffix: true }
   );
 
-  // Modal
-
+  /* Modals */
   const [showModalUpdate, handleOpenUpdateModal, handleCloseUpdateModal] =
     useModal();
 
@@ -85,7 +77,7 @@ export const PostHeadContainer = ({
     }
   };
 
-  // Delete
+  /* Delete */
   const handleDelete = async (id: number) => {
     try {
       const { message } = await deletePost(id);
@@ -94,7 +86,9 @@ export const PostHeadContainer = ({
         style: { background: "white", color: "red" },
         iconTheme: { primary: "red", secondary: "white" },
       });
-      dispatch(deletePostRedux(id));
+
+      if (postsRedux.length > 0) dispatch(deletePostRedux(id));
+      //  else dispatch(deleteProfilePost(id));
     } catch (error) {
       console.log(error);
     }
@@ -114,15 +108,17 @@ export const PostHeadContainer = ({
               alt="#"
               fill
               loading="lazy"
-              sizes="(max-wdith: 50px) 100vw, 30px"
+              sizes="(max-width: 50px) 100vw, 30px"
               className="rounded-full object-cover object-top"
             />
           </div>
         </Link>
+
         <div className="ml-4">
           <p className="text-black/70 dark:text-white font-bold capitalize">
             {authorUsername}
           </p>
+
           <span className="text-[13px] text-gray-500">{date}</span>
         </div>
       </div>
@@ -133,17 +129,18 @@ export const PostHeadContainer = ({
         >
           <BsThreeDots className="text-black/70 dark:text-white text-[22px]" />
 
-          <div ref={showOptionsRef} className="relative hidden">
-            <div className="absolute top-0 text-white right-1 bg-blue-500 dark:bg-gray-950 px-2 pt-1 pb-2">
+          <div className="relative hidden" ref={showOptionsRef}>
+            <div className="absolute top-0 text-white right-1 bg-blue-500 dark:bg-gray-950 px-2 pt-1 pb-2 z-50">
               <span
                 className="cursor-pointer block mb-1"
                 onClick={() => handleOpenModal(post.id)}
               >
                 Update
               </span>
+
               <span
+                className="cursor-pointer block "
                 onClick={() => handleDelete(post.id)}
-                className="cursor-pointer block"
               >
                 Delete
               </span>
@@ -154,14 +151,14 @@ export const PostHeadContainer = ({
 
       {showModalUpdate === post.id && (
         <ModalUpdate
-          setImage={setImageCallback}
-          image={image}
-          setPrevImage={setPrevImageCallback}
-          prevImage={prevImage}
-          setDescription={setDescriptionCallback}
-          description={description}
-          handleCloseUpdateModal={handleCloseUpdateModal}
           post={post}
+          image={image}
+          prevImage={prevImage}
+          description={description}
+          setImage={setImageCallback}
+          setPrevImage={setPrevImageCallback}
+          setDescription={setDescriptionCallback}
+          handleCloseUpdateModal={handleCloseUpdateModal}
         />
       )}
     </div>

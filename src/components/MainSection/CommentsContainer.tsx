@@ -5,6 +5,7 @@ import { useRedux } from "@/hooks/useRedux";
 import { Comment, Post } from "@/interface/interface";
 
 import { formatDistance, parseISO } from "date-fns";
+import { createComment } from "@/services/comment";
 
 const variants = {
   hidden: { opacity: 0, y: -100 },
@@ -17,9 +18,18 @@ export const CommentsContainer = () => {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleComment = (e: FormEvent) => {
+  const handleComment = async (
+    e: FormEvent,
+    authorId: number,
+    postId: number
+  ) => {
     e.preventDefault();
     try {
+      await createComment({
+        text: e.target.elements![0].value,
+        author: authorId,
+        post: postId,
+      });
     } catch (error) {}
   };
 
