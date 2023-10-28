@@ -5,38 +5,47 @@ import { useRedux } from "@/hooks/useRedux";
 import { Comment, Post } from "@/interface/interface";
 
 import { formatDistance, parseISO } from "date-fns";
-import { createComment } from "@/services/comment";
+import { createComment, getComment } from "@/services/comment";
 
 const variants = {
   hidden: { opacity: 0, y: -100 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
 };
 
-export const CommentsContainer = () => {
-  const { comments: CommentsRedux } = useRedux();
+interface Props {
+  post: Post;
+}
+
+export const CommentsContainer = ({ post }: Props) => {
+  const { comments: CommentsRedux, userLogged } = useRedux();
   //   console.log(CommentsRedux);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleComment = async (
-    e: FormEvent,
+    e: FormEvent<HTMLFormElement> | any,
     authorId: number,
     postId: number
   ) => {
     e.preventDefault();
     try {
-      await createComment({
+      const { id } = await createComment({
         text: e.target.elements![0].value,
         author: authorId,
         post: postId,
       });
+      await getComment(id);
     } catch (error) {}
   };
 
   return (
     <>
       <div className="w-full">
-        <form className="w-full flex flex-col gap-y-3" action="">
+        <form
+          onSubmit={(e) => handleComment(e, userLogged!.id, post.id)}
+          className="w-full flex flex-col gap-y-3"
+          action=""
+        >
           <textarea
             placeholder="Add a comment"
             className="input resize-none textarea-transition placeholder:dark:text-gry-200  textarea-scrollbar text-gray-700 dark:text-gray-200 placeholder:text-gray-600 border-b-gray-400"

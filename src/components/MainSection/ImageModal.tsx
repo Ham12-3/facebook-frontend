@@ -74,7 +74,7 @@ export const ImageModal = ({
               />
 
               {/* Comments */}
-              <CommentsContainer />
+              <CommentsContainer post={post} />
             </div>
           </motion.section>
         </div>
