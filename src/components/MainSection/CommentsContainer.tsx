@@ -1,11 +1,14 @@
-import React, { FormEvent, useRef } from "react";
+import React, { FormEvent, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRedux } from "@/hooks/useRedux";
 import { Comment, Post } from "@/interface/interface";
 
+import toast, { Toaster } from "react-hot-toast";
+
 import { formatDistance, parseISO } from "date-fns";
 import { createComment, getComment } from "@/services/comment";
+import { addCommentRedux } from "@/redux/reducers/comment.slice";
 
 const variants = {
   hidden: { opacity: 0, y: -100 },
@@ -17,26 +20,35 @@ interface Props {
 }
 
 export const CommentsContainer = ({ post }: Props) => {
-  const { comments: CommentsRedux, userLogged } = useRedux();
+  const { comments: CommentsRedux, userLogged, dispatch } = useRedux();
   //   console.log(CommentsRedux);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleComment = async (
-    e: FormEvent<HTMLFormElement> | any,
-    authorId: number,
-    postId: number
-  ) => {
-    e.preventDefault();
-    try {
-      const { id } = await createComment({
-        text: e.target.elements![0].value,
-        author: authorId,
-        post: postId,
-      });
-      await getComment(id);
-    } catch (error) {}
-  };
+  const handleComment = useCallback(
+    async (
+      e: FormEvent<HTMLFormElement> | any,
+      authorId: number,
+      postId: number
+    ) => {
+      e.preventDefault();
+      try {
+        const { id } = await createComment({
+          text: e.target.elements![0].value,
+          author: authorId,
+          post: postId,
+        });
+        const commentCreated = await getComment(id);
+        dispatch(addCommentRedux(commentCreated));
+        toast.success("Comment created successfully", { duration: 2500 });
+        textareaRef.current!.value = "";
+        textareaRef.current!.blur();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    []
+  );
 
   return (
     <>

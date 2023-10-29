@@ -17,6 +17,7 @@ import {
   getCommentsRedux,
   removeCommentsRedux,
 } from "@/redux/reducers/comment.slice";
+import { Toaster } from "react-hot-toast";
 
 const variants = {
   hidden: { opacity: 0, x: 100 },
@@ -107,6 +108,7 @@ export const PostContainer = () => {
           </motion.div>
         );
       })}
+      <Toaster />
     </AnimatePresence>
   );
 };

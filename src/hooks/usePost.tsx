@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { getPosts } from "@/services/post";
 
 import { useRedux } from "./useRedux";
@@ -10,6 +10,8 @@ export const usePost = () => {
   const { dispatch, posts } = useRedux();
 
   const [page, setPage] = useState(1);
+
+  useCallback((newPage) => {}, []);
 
   useEffect(() => {
     async function fetchPosts() {
