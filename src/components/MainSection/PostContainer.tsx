@@ -57,12 +57,15 @@ export const PostContainer = () => {
     }
   };
 
-  const lastPostRef = useCallback((node: HTMLDivElement) => {
-    if (observeRef.current) observeRef.current.disconnect();
+  const lastPostRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (observeRef.current) observeRef.current.disconnect();
 
-    observeRef.current = new IntersectionObserver(handleObserver);
-    if (node) observeRef.current.observe(node);
-  }, []);
+      observeRef.current = new IntersectionObserver(handleObserver);
+      if (node) observeRef.current.observe(node);
+    },
+    [hasMore]
+  );
 
   return (
     <AnimatePresence>
@@ -75,6 +78,7 @@ export const PostContainer = () => {
             animate={"visible"}
             exit={"hidden"}
             className="w-full bg-gray-200/30 dark:bg-black p-[20px] shadow-md text-gray-400 rounded-[6px] my-5 transition-colors duration-300 ease-in"
+            ref={index === posts.length - 1 ? lastPostRef : null}
           >
             <PostHeadContainer
               authorId={post.author_id ?? userLogged!.id}
