@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense, useCallback, useEffect, useRef } from "react";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useRedux } from "@/hooks/useRedux";
@@ -25,9 +25,11 @@ const variants = {
 };
 
 export const PostContainer = () => {
-  const { posts, userLogged, dispatch } = useRedux();
+  const { posts, userLogged, dispatch, hasMore } = useRedux();
   // console.log(posts);
-  const { setPage } = usePost();
+  const { setPageCallback: setPage } = usePost();
+
+  const observeRef = useRef<IntersectionObserver>();
 
   const [showImageModalIndex, handleOpenImageModal, handleCloseImageModal] =
     useModal();
@@ -48,6 +50,19 @@ export const PostContainer = () => {
   };
 
   // useEffect(() => {}, []);
+
+  const handleObserver = (entries: IntersectionObserverEntry[]) => {
+    if (entries[0].isIntersecting && hasMore) {
+      setPage((prev: any) => prev + 1);
+    }
+  };
+
+  const lastPostRef = useCallback((node: HTMLDivElement) => {
+    if (observeRef.current) observeRef.current.disconnect();
+
+    observeRef.current = new IntersectionObserver(handleObserver);
+    if (node) observeRef.current.observe(node);
+  }, []);
 
   return (
     <AnimatePresence>

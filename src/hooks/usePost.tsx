@@ -11,7 +11,12 @@ export const usePost = () => {
 
   const [page, setPage] = useState(1);
 
-  useCallback((newPage) => {}, []);
+  const setPageCallback = useCallback(
+    (newPage: any) => {
+      setPage(newPage);
+    },
+    [page]
+  );
 
   useEffect(() => {
     async function fetchPosts() {
@@ -29,5 +34,5 @@ export const usePost = () => {
     fetchPosts();
   }, [page]);
 
-  return { setPage };
+  return { setPageCallback };
 };
