@@ -6,6 +6,7 @@ import { Post } from "@/interface/interface";
 import { BsFillImageFill } from "react-icons/bs";
 import { ChangeEvent, FormEvent, useRef } from "react";
 import { updatePostRedux } from "@/redux/reducers/post.slice";
+import { updateProfilePost } from "@/redux/reducers/profilePosts.slice";
 // import { updateProfilePost } from '@/redux/reducers/profilePosts.slice';
 
 interface Props {
@@ -50,7 +51,7 @@ export const ModalUpdate = ({
       toast.success(message, { duration: 2500 });
 
       if (postsRedux.length > 0) dispatch(updatePostRedux(postUpdated));
-      //  else dispatch(updateProfilePost(postUpdated));
+      else dispatch(updateProfilePost(postUpdated));
 
       setDescription("");
       setImage(undefined);

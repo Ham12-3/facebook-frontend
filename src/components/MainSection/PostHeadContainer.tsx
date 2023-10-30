@@ -10,6 +10,7 @@ import { useModal } from "@/hooks/useModal";
 import { deletePost } from "@/services/post";
 import toast from "react-hot-toast";
 import { deletePostRedux } from "@/redux/reducers/post.slice";
+import { deleteProfilePost } from "@/redux/reducers/profilePosts.slice";
 // import { deleteProfilePost } from '@/redux/reducers/profilePosts.slice';
 
 interface Props {
@@ -88,7 +89,7 @@ export const PostHeadContainer = ({
       });
 
       if (postsRedux.length > 0) dispatch(deletePostRedux(id));
-      //  else dispatch(deleteProfilePost(id));
+      else dispatch(deleteProfilePost(id));
     } catch (error) {
       console.log(error);
     }
