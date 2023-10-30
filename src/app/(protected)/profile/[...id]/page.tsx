@@ -54,7 +54,7 @@ function ProfilePage({ params }: { params: { id: string } }) {
                 onClick={() => handleOpenProfile(user?.id)}
                 className="w-[200px] h-[200px] absolute left-28 top-0 cursor-pointer aspect-square"
               >
-                {/* <Image
+                <Image
                   src={`${process.env.NEXT_PUBLIC_API_URL}${user?.image}`}
                   alt="#"
                   fill
@@ -64,27 +64,30 @@ function ProfilePage({ params }: { params: { id: string } }) {
                   blurDataURL="/blur.svg"
                   className="object-cover object-top rounded-full
                   "
-                /> */}
-              </div>
-            </div>
-
-            <div
-              onClick={handleCloseProfile}
-              className="w-full h-full fixed top-0 left-0 z-50 px-20 bg-black/70 flex items-center justify-center"
-            >
-              <div className="relative w-[700px] h-[calc(100%-100px)] cursor-pointer aspect-video mx-auto bg-black">
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_API_URL}${user?.image}`}
-                  alt="#"
-                  sizes="(max-width: 1000px) 100vw, 9000px, 600px"
-                  fill
-                  loading="lazy"
-                  placeholder="blur"
-                  blurDataURL="/blur.svg"
-                  className="object-contain cursor-pointer"
                 />
               </div>
             </div>
+
+            {showProfileIndex === user!.id && (
+              <div
+                onClick={handleCloseProfile}
+                className="w-full h-full fixed top-0 left-0 z-50 px-20 bg-black/70 flex items-center justify-center"
+              >
+                <div className="relative w-[700px] h-[calc(100%-100px)] cursor-pointer aspect-video mx-auto bg-black">
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_API_URL}${user?.image}`}
+                    alt="#"
+                    sizes="(max-width: 1000px) 100vw, 9000px, 600px"
+                    fill
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL="/blur.svg"
+                    className="object-contain cursor-pointer"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </>
       </AnimatedWrapper>
