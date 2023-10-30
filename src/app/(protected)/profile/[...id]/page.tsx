@@ -1,9 +1,43 @@
-import React from 'react'
+"use client";
 
-function ProfilePage() {
+import { AnimatedWrapper } from "@/components/AnimatedWrapper";
+import { useRedux } from "@/hooks/useRedux";
+import { User } from "@/interface/interface";
+import { getUser } from "@/services/user";
+import React, { useEffect, useState } from "react";
+
+function ProfilePage({ params }: { params: { id: string } }) {
+  const { dispatch } = useRedux();
+
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    async function fetchUser() {
+      const userResponse = await getUser(params.id);
+      setUser(userResponse);
+
+      const posts = userResponse.posts.sort((a: any, b: any) => b.id - a.id);
+    }
+
+    fetchUser();
+  }, [params.id]);
+
   return (
-    <div>ProfilePage</div>
-  )
+    <>
+      <AnimatedWrapper>
+        <>
+          <div className="bg-gray-200 relative flex h-40 justify-end text-black/70">
+            <div>
+              <h1></h1>
+              <p></p>
+
+              <span></span>
+            </div>
+          </div>
+        </>
+      </AnimatedWrapper>
+    </>
+  );
 }
 
-export default ProfilePage
+export default ProfilePage;
