@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "ivebook-backend.onrender.com/",
+        hostname: "ivebook-backend.onrender.com",
         port: "",
         pathname: "/**",
       },
