@@ -9,5 +9,16 @@ export const useRedux = () => {
   const { users } = useAppSelector((state) => state.user);
   const { value: hasMore } = useAppSelector((state) => state.hasMore);
   const { comments } = useAppSelector((state) => state.comment);
-  return { posts, userLogged, dispatch, users, hasMore, comments };
+
+  const { posts: profilePosts } = useAppSelector((state) => state.profilePosts);
+
+  return {
+    posts,
+    userLogged,
+    dispatch,
+    users,
+    hasMore,
+    comments,
+    profilePosts,
+  };
 };

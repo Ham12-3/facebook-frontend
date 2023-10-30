@@ -5,6 +5,7 @@ import userReducer from "@/redux/reducers/user.slice";
 import postReducer from "@/redux/reducers/post.slice";
 import hasMoreReducer from "@/redux/reducers/hasMore";
 import commentReducer from "@/redux/reducers/comment.slice";
+import profilePostsReducer from "@/redux/reducers/profilePosts.slice";
 const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -12,6 +13,7 @@ const store = configureStore({
     post: postReducer,
     hasMore: hasMoreReducer,
     comment: commentReducer,
+    profilePosts: profilePostsReducer,
   },
 });
 
