@@ -18,7 +18,14 @@ function SearchPage() {
             {users.map((user, index) => {
               return (
                 <div key={index}>
-                  <SearchUser id={user.id} image={user.image} />
+                  <SearchUser
+                    id={user.id}
+                    image={user.image}
+                    firstName={user.first_name}
+                    lastName={user.last_name}
+                    username={user.username}
+                    postCount={user.posts_count}
+                  />
                 </div>
               );
             })}

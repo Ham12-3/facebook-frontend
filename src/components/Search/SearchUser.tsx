@@ -5,9 +5,20 @@ import React from "react";
 interface Props {
   id: number;
   image: string | undefined;
+  firstName: string;
+  lastName: string;
+  username: string;
+  postCount: number;
 }
 
-export const SearchUser = ({ id, image }: Props) => {
+export const SearchUser = ({
+  id,
+  image,
+  firstName,
+  lastName,
+  username,
+  postCount,
+}: Props) => {
   return (
     <div className="flex items-center gap-x-10 my-8 ml-20">
       <Link href={`/profile/${id}`}>
@@ -22,6 +33,22 @@ export const SearchUser = ({ id, image }: Props) => {
           />
         </div>
       </Link>
+      <div>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+          {firstName} {lastName}
+        </h2>
+
+        <h4 className="text-[15px] text-black/60 dark:text-white/60">
+          {username}
+        </h4>
+
+        <p className="text-xs text-black/70 dark:text-white/70">
+          Posts:{" "}
+          <strong className="font-bold text-black dark:text-white">
+            {postCount}
+          </strong>{" "}
+        </p>
+      </div>
     </div>
   );
 };
