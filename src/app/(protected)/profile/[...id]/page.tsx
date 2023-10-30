@@ -1,20 +1,28 @@
 "use client";
 
 import { AnimatedWrapper } from "@/components/AnimatedWrapper";
+import { ImageModal } from "@/components/MainSection/ImageModal";
+import { Likes } from "@/components/MainSection/Likes";
+import { PostDescription } from "@/components/MainSection/PostDescription";
+import { PostHeadContainer } from "@/components/MainSection/PostHeadContainer";
 import { useModal } from "@/hooks/useModal";
 import { useRedux } from "@/hooks/useRedux";
 import { User } from "@/interface/interface";
 import { getProfilePosts } from "@/redux/reducers/profilePosts.slice";
 import { getUser } from "@/services/user";
+
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 function ProfilePage({ params }: { params: { id: string } }) {
-  const { dispatch, profilePosts } = useRedux();
+  const { dispatch, profilePosts, userLogged } = useRedux();
 
   const [user, setUser] = useState<User | null>(null);
 
   const [showProfileIndex, handleOpenProfile, handleCloseProfile] = useModal();
+
+  const [showPostModalIndex, handleOpenPostModal, handleClosePostModal] =
+    useModal();
 
   useEffect(() => {
     async function fetchUser() {
@@ -89,6 +97,54 @@ function ProfilePage({ params }: { params: { id: string } }) {
               </div>
             )}
           </div>
+
+          {/* Posts  */}
+          {profilePosts.map((post) => {
+            return (
+              <div
+                key={post.id}
+                className="flex items-center justify-center w-4/5 my-6 mx-auto"
+              >
+                <div className="px-10 py-8 w-5/6 shadow-xl bbg-gray-200 dark:bg-black dark:shadow-slate-950/30 rounded-md transition-colors duration-300 ease-in">
+                  <PostHeadContainer
+                    authorId={post.author_id ?? userLogged!.id}
+                    post={post}
+                    posts={profilePosts}
+                    authorUsername={
+                      typeof post.author === "number"
+                        ? userLogged!.username
+                        : post.author
+                    }
+                  />
+                  <PostDescription description={post.description} />
+
+                  {post.image && (
+                    <div className="relative w-full h-[450px] max-w-[calc(100%-150px)] cursor-pointer aspect-video mx-auto">
+                      <Image
+                        src={`${process.env.NEXT_PUBLIC_API_URL}${post.image}`}
+                        alt="#"
+                        fill
+                        placeholder="blur"
+                        priority
+                        blurDataURL="/blur.svg"
+                        sizes="(max-width: 1600px) 100vw, 700px, 500px"
+                        className="object-cover object-top rounded-md"
+                      />
+                    </div>
+                  )}
+                  <div className="mt-4 inline-block scale-110">
+                    <Likes
+                      likes={post.likes}
+                      likesCount={post.likes.length}
+                      postId={post.id}
+                    />
+                  </div>
+                </div>
+                {/* Image Modal  */}
+                <ImageModal handleCloseImage={} />
+              </div>
+            );
+          })}
         </>
       </AnimatedWrapper>
     </>
