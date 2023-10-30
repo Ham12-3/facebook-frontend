@@ -34,6 +34,8 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
+the link to the application is: https://facebook-frontend-git-master-ham12-3s-projects.vercel.app/
+
 
 
 ![django-4](https://github.com/Ham12-3/facebook-frontend/assets/93613316/8fee43a2-3a26-4c30-bb19-457bdbfd6494)
